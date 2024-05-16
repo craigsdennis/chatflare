@@ -77,4 +77,5 @@ npx wrangler ai models --json | jq '
 
 - [x] Add help area
 - [x] Change settings to be "advanced" mode.
+- [ ] Get access in front of it
 - [ ] Use D1 for Session state
