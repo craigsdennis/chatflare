@@ -37,6 +37,9 @@ app.get("/", (c) => {
                 Send
               </button>
             </form>
+            <div>
+              <button id="reset" className="m-2 px-4 py-2 bg-chat-button text-black rounded hover:bg-gray-300">Reset 🗑️</button>
+            </div>
             <div className="text-xs text-gray-500 mt-2">
               <p className="model-display">-</p>
               <input
@@ -49,42 +52,42 @@ app.get("/", (c) => {
         <div className="w-80 bg-chat-settings p-6 shadow-xl flex flex-col justify-between">
           <div>
             <div className="mb-4">
-              <h2 className="text-xl font-semibold">Chat Settings</h2>
-              <p className="text-sm text-chat-helpertext mt-1">
-                Try out different models and configurations for your chat
-                application
-              </p>
+              <h2 className="text-xl font-semibold">Chatflare</h2>
             </div>
-            <form>
-              <div className="mb-4">
-                <label className="block text-black text-sm font-bold mb-2">
-                  Model
-                </label>
-                <select
-                  id="model-select"
-                  className="border border-chat-border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline"
-                ></select>
-              </div>
-              <div className="mb-4">
-                <label className="block text-black text-sm font-bold mb-2">
-                  System Message
-                </label>
-                <p className="text-sm text-chat-helpertext mb-2">
-                  Guides the tone of the response
-                </p>
-                <textarea
-                  id="system-message"
-                  className="border border-chat-border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline"
-                  placeholder="Enter system message..."
-                ></textarea>
-              </div>
-              <button
-                id="apply-chat-settings"
-                className="w-full px-4 py-2 bg-chat-apply text-white rounded hover:bg-gray-800 focus:outline-none focus:shadow-outline"
-              >
-                Apply Changes
-              </button>
-            </form>
+            <p className="text-sm text-chat-helpertext mt-1">Need help?</p>
+            <details>
+              <summary>Advanced settings</summary>
+              <form>
+                <div className="mb-4">
+                  <label className="block text-black text-sm font-bold mb-2">
+                    Model
+                  </label>
+                  <select
+                    id="model-select"
+                    className="border border-chat-border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline"
+                  ></select>
+                </div>
+                <div className="mb-4">
+                  <label className="block text-black text-sm font-bold mb-2">
+                    System Message
+                  </label>
+                  <p className="text-sm text-chat-helpertext mb-2">
+                    Guides the tone of the response
+                  </p>
+                  <textarea
+                    id="system-message"
+                    className="border border-chat-border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline"
+                    placeholder="Enter system message..."
+                  ></textarea>
+                </div>
+                <button
+                  id="apply-chat-settings"
+                  className="w-full px-4 py-2 bg-chat-apply text-white rounded hover:bg-gray-800 focus:outline-none focus:shadow-outline"
+                >
+                  Apply Changes
+                </button>
+              </form>
+            </details>
           </div>
           <div className="mt-4 text-center text-sm text-gray-500 flex items-center justify-center">
             <span className="mr-2 pt-2">Powered by</span>

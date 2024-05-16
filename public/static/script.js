@@ -39,6 +39,13 @@ const models = {
   ],
 };
 
+const CHAT_MODEL_DEFAULT = "@cf/meta/llama-3-8b-instruct";
+const SYSTEM_MESSAGE_DEFAULT = `You are a helpful assistant used internally for employees of Cloudflare.
+You are referred to as Chatflare.
+
+Use the orange heart emoji 🧡 for expressing gratitude, creativity, or helpfulness.
+`
+
 const domReady = (callback) => {
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", callback);
@@ -90,11 +97,13 @@ function createChatMessageElement(msg) {
     response.innerHTML = html;
     div.appendChild(response);
     highlightCode(div);
-    const modelDisplay = document.createElement("p");
-    modelDisplay.className = "message-model";
     const settings = retrieveChatSettings();
-    modelDisplay.innerText = settings.model;
-    div.appendChild(modelDisplay);
+    if (settings.model !== CHAT_MODEL_DEFAULT) {
+      const modelDisplay = document.createElement("p");
+      modelDisplay.className = "message-model";
+      modelDisplay.innerText = settings.model;
+      div.appendChild(modelDisplay);
+    }
   } else {
     const userMessage = document.createElement("p");
     userMessage.innerText = msg.content;
@@ -107,7 +116,10 @@ function retrieveChatSettings() {
   const settingsJSON = localStorage.getItem("chatSettings");
   if (!settingsJSON) {
     // TODO: Defaults?
-    return {};
+    return {
+      model: CHAT_MODEL_DEFAULT,
+      systemMessage: SYSTEM_MESSAGE_DEFAULT
+    };
   }
   return JSON.parse(settingsJSON);
 }
@@ -243,5 +255,13 @@ document
   .getElementById("apply-chat-settings")
   .addEventListener("click", function (e) {
     e.preventDefault();
+    applyChatSettingChanges();
+  });
+
+document
+  .getElementById("reset")
+  .addEventListener("click", function (e) {
+    e.preventDefault();
+    // This does a refresh
     applyChatSettingChanges();
   });
