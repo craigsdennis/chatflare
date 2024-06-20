@@ -38,7 +38,12 @@ app.get("/", (c) => {
               </button>
             </form>
             <div>
-              <button id="reset" className="m-2 px-4 py-2 bg-chat-button text-black rounded hover:bg-gray-300">Reset 🗑️</button>
+              <button
+                id="reset"
+                className="m-2 px-4 py-2 bg-chat-button text-black rounded hover:bg-gray-300"
+              >
+                Reset 🗑️
+              </button>
             </div>
             <div className="text-xs text-gray-500 mt-2">
               <p className="model-display">-</p>
@@ -131,10 +136,18 @@ app.post("/api/chat", async (c) => {
   const MAX_RETRIES = 3;
   while (successfulInference === false && retryCount < MAX_RETRIES) {
     try {
-      eventSourceStream = (await c.env.AI.run(payload.config.model, {
-        messages,
-        stream: true,
-      })) as ReadableStream;
+      eventSourceStream = (await c.env.AI.run(
+        payload.config.model,
+        {
+          messages,
+          stream: true,
+        },
+        {
+          gateway: {
+            id: "chatflare",
+          },
+        }
+      )) as ReadableStream;
       successfulInference = true;
     } catch (err) {
       lastError = err;
