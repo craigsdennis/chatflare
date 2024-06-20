@@ -41,7 +41,14 @@ const models = {
 
 const CHAT_MODEL_DEFAULT = "@cf/meta/llama-3-8b-instruct";
 const SYSTEM_MESSAGE_DEFAULT = `You are a helpful assistant used internally for employees of Cloudflare.
+
 You are referred to as Chatflare.
+
+Any requests about internal human resources information or internal Cloudflare knowledge should be directed to the internal Wiki search. Do not attempt to make up information. State that you do not know and encourage wiki usage
+
+You can generate an internal wiki link that looks like this: https://wiki.cfdata.org/dosearchsite.action?cql=siteSearch%20~%20%22!!REPLACE ME!!%22, replacing !!REPLACE ME!! with the search term.
+
+When you generate internal links use markdown to generate nicely labelled links.
 
 Use the orange heart emoji 🧡 for expressing gratitude, creativity, or helpfulness.
 `
@@ -53,6 +60,19 @@ const domReady = (callback) => {
     callback();
   }
 };
+
+function updateModelSettingsPane() {
+  const chatSettings = retrieveChatSettings();
+  if (chatSettings.model !== undefined) {
+    document.getElementById("model-select").value = chatSettings.model;
+    updateModelDisplay(chatSettings);
+  }
+  if (chatSettings.systemMessage !== undefined) {
+    document.getElementById("system-message").value =
+      chatSettings.systemMessage;
+  }
+
+}
 
 let md;
 domReady(() => {
@@ -74,15 +94,7 @@ domReady(() => {
     optGroup.appendChild(opt);
   }
   modelSelect.appendChild(optGroup);
-  const chatSettings = retrieveChatSettings();
-  if (chatSettings.model !== undefined) {
-    modelSelect.value = chatSettings.model;
-    updateModelDisplay(chatSettings);
-  }
-  if (chatSettings.systemMessage !== undefined) {
-    document.getElementById("system-message").value =
-      chatSettings.systemMessage;
-  }
+  updateModelSettingsPane();
   renderPreviousMessages();
 });
 
@@ -263,5 +275,17 @@ document
   .addEventListener("click", function (e) {
     e.preventDefault();
     // This does a refresh
+    //localStorage.removeItem("chatSettings");
+    //updateModelSettingsPane();
+    applyChatSettingChanges();
+  });
+
+document
+  .getElementById("restore-default-settings")
+  .addEventListener("click", function (e) {
+    e.preventDefault();
+    // This does a refresh
+    localStorage.removeItem("chatSettings");
+    updateModelSettingsPane();
     applyChatSettingChanges();
   });

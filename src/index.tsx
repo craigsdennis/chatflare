@@ -86,6 +86,12 @@ app.get("/", (c) => {
                 >
                   Apply Changes
                 </button>
+                <button
+                  id="restore-default-settings"
+                  className="w-full px-4 py-2 mt-5 bg-chat-apply bg-color-grey text-white rounded hover:bg-gray-800 focus:outline-none focus:shadow-outline"
+                >
+                  ♻️ Restore Default Settings
+                </button>
               </form>
             </details>
           </div>
