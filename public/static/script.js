@@ -1,16 +1,19 @@
 const models = {
-  ga: [
-    "@cf/meta/llama-2-7b-chat-int8",
-    "@cf/meta/llama-2-7b-chat-fp16",
-    "@cf/mistral/mistral-7b-instruct-v0.1",
-  ],
   beta: [
-    "@cf/meta/llama-3-8b-instruct",
     "@cf/deepseek-ai/deepseek-math-7b-instruct",
     "@cf/defog/sqlcoder-7b-2",
+    "@cf/fblgit/una-cybertron-7b-v2-bf16",
     "@cf/google/gemma-2b-it-lora",
     "@cf/google/gemma-7b-it-lora",
     "@cf/meta-llama/llama-2-7b-chat-hf-lora",
+    "@cf/meta/llama-3-8b-instruct",
+    "@cf/meta/llama-3-8b-instruct-awq",
+    "@cf/meta/llama-3.1-8b-instruct",
+    "@cf/meta/llama-3.1-8b-instruct-awq",
+    "@cf/meta/llama-3.1-8b-instruct-fp8",
+    "@cf/meta/llama-3.2-11b-vision-instruct",
+    "@cf/meta/llama-3.2-1b-instruct",
+    "@cf/meta/llama-3.2-3b-instruct",
     "@cf/microsoft/phi-2",
     "@cf/mistral/mistral-7b-instruct-v0.2-lora",
     "@cf/openchat/openchat-3.5-0106",
@@ -23,23 +26,25 @@ const models = {
     "@cf/tinyllama/tinyllama-1.1b-chat-v1.0",
     "@hf/google/gemma-7b-it",
     "@hf/mistral/mistral-7b-instruct-v0.2",
-    "@hf/mistral/mistral-7b-instruct-v0.2",
     "@hf/nexusflow/starling-lm-7b-beta",
     "@hf/nousresearch/hermes-2-pro-mistral-7b",
-    "@hf/thebloke/codellama-7b-instruct-awq",
     "@hf/thebloke/deepseek-coder-6.7b-base-awq",
     "@hf/thebloke/deepseek-coder-6.7b-instruct-awq",
     "@hf/thebloke/llama-2-13b-chat-awq",
     "@hf/thebloke/llamaguard-7b-awq",
     "@hf/thebloke/mistral-7b-instruct-v0.1-awq",
     "@hf/thebloke/neural-chat-7b-v3-1-awq",
-    "@hf/thebloke/openchat_3.5-awq",
     "@hf/thebloke/openhermes-2.5-mistral-7b-awq",
     "@hf/thebloke/zephyr-7b-beta-awq",
   ],
+  ga: [
+    "@cf/meta/llama-2-7b-chat-fp16",
+    "@cf/meta/llama-2-7b-chat-int8",
+    "@cf/mistral/mistral-7b-instruct-v0.1",
+    "@hf/meta-llama/meta-llama-3-8b-instruct",
+  ],
 };
-
-const CHAT_MODEL_DEFAULT = "@cf/meta/llama-3-8b-instruct";
+const CHAT_MODEL_DEFAULT = "@cf/meta/llama-3.1-8b-instruct";
 const SYSTEM_MESSAGE_DEFAULT = `You are a helpful assistant used internally for employees of Cloudflare.
 
 You are referred to as Chatflare.
@@ -53,7 +58,7 @@ You can generate an internal wiki link that looks like this: https://wiki.cfdata
 When you generate internal links use markdown to generate nicely labelled links.
 
 Use the orange heart emoji 🧡 for expressing gratitude, creativity, or helpfulness.
-`
+`;
 
 const domReady = (callback) => {
   if (document.readyState === "loading") {
@@ -73,7 +78,6 @@ function updateModelSettingsPane() {
     document.getElementById("system-message").value =
       chatSettings.systemMessage;
   }
-
 }
 
 let md;
@@ -129,10 +133,9 @@ function createChatMessageElement(msg) {
 function retrieveChatSettings() {
   const settingsJSON = localStorage.getItem("chatSettings");
   if (!settingsJSON) {
-    // TODO: Defaults?
     return {
       model: CHAT_MODEL_DEFAULT,
-      systemMessage: SYSTEM_MESSAGE_DEFAULT
+      systemMessage: SYSTEM_MESSAGE_DEFAULT,
     };
   }
   return JSON.parse(settingsJSON);
@@ -272,15 +275,13 @@ document
     applyChatSettingChanges();
   });
 
-document
-  .getElementById("reset")
-  .addEventListener("click", function (e) {
-    e.preventDefault();
-    // This does a refresh
-    //localStorage.removeItem("chatSettings");
-    //updateModelSettingsPane();
-    applyChatSettingChanges();
-  });
+document.getElementById("reset").addEventListener("click", function (e) {
+  e.preventDefault();
+  // This does a refresh
+  //localStorage.removeItem("chatSettings");
+  //updateModelSettingsPane();
+  applyChatSettingChanges();
+});
 
 document
   .getElementById("restore-default-settings")
